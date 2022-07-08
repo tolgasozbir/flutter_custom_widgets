@@ -1,4 +1,4 @@
-import 'package:custom_widgets/progress_button/progress_button.dart';
+import 'progress_button.dart';
 import 'package:flutter/material.dart';
 
 class ProgressButtonView extends StatefulWidget {
@@ -15,7 +15,7 @@ class _ProgressButtonViewState extends State<ProgressButtonView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text("Progress Button"),),
+      appBar: AppBar(title: Text("Progress Button"),),
       body: Center(
         child: ProgressButton(
           state: buttonState,

@@ -82,7 +82,10 @@ class _ProgressButtonState extends State<ProgressButton> {
               : widget.loadingColor
       ),
       child: TextButton(
-        onPressed: widget.onPressed,
+        onPressed: (){
+          if (widget.state != ButtonState.idle) return;
+          else widget.onPressed();
+        },
         child: widget.state == ButtonState.idle 
           ? _iconText(widget.state) 
           : widget.state == ButtonState.fail
