@@ -1,10 +1,21 @@
 import 'package:custom_widgets/page_wave_transition/first_page_view.dart';
-
+import 'package:custom_widgets/test/card.dart';
+import 'package:custom_widgets/test/cardprovider.dart';
+import 'package:provider/provider.dart';
 import 'alphabetic_list_page_view/alphabetic_list_view.dart';
 import 'progress_button/progress_button_view.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CardProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -19,6 +30,7 @@ class MyApp extends StatelessWidget {
         "/progress_button": (context) => ProgressButtonView(),
         "/alphabetic_list_view": (context) => AlphabeticListView(),
         "/page_wave_transition": (context) => FirstPageView(),
+        "/card": (context) => MyCArd(),
       },
     );
   }
@@ -56,6 +68,10 @@ class _HomeState extends State<Home> {
           ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, "/page_wave_transition"), 
             child: Text("Page Wave Transition")
+          ),         
+          ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, "/card"), 
+            child: Text("Page")
           ),
         ],
       ),
