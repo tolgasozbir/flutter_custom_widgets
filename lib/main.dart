@@ -1,3 +1,5 @@
+import 'package:custom_widgets/page_wave_transition/first_page_view.dart';
+
 import 'alphabetic_list_page_view/alphabetic_list_view.dart';
 import 'progress_button/progress_button_view.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ class MyApp extends StatelessWidget {
         "/": (context) => Home(),
         "/progress_button": (context) => ProgressButtonView(),
         "/alphabetic_list_view": (context) => AlphabeticListView(),
+        "/page_wave_transition": (context) => FirstPageView(),
       },
     );
   }
@@ -49,6 +52,10 @@ class _HomeState extends State<Home> {
           ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, "/alphabetic_list_view"), 
             child: Text("Alphabetic List")
+          ),          
+          ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, "/page_wave_transition"), 
+            child: Text("Page Wave Transition")
           ),
         ],
       ),

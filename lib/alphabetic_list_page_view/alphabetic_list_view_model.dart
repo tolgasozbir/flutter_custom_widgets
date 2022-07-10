@@ -34,7 +34,7 @@ abstract class AlphabeticListViewModel extends State<AlphabeticListView> {
 
   Future<void> getUsers() async {
     var assetBundle = DefaultAssetBundle.of(context);
-    var data = await assetBundle.loadString("assets/users.json");
+    var data = await assetBundle.loadString("assets/json/users.json");
     userList = (jsonDecode(data) as List).map((e) => User.fromJson(e)).toList();
     userListSearch = userList;
   }
