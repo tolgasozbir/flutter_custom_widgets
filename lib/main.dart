@@ -1,7 +1,5 @@
 import 'package:custom_widgets/battle_card/battle_cards_provider.dart';
 import 'package:custom_widgets/battle_card/battle_screen_view.dart';
-import 'package:custom_widgets/battle_card/cardprovider.dart';
-import 'package:custom_widgets/battle_card/provider2.dart';
 import 'package:custom_widgets/page_wave_transition/first_page_view.dart';
 import 'package:provider/provider.dart';
 import 'alphabetic_list_page_view/alphabetic_list_view.dart';
@@ -12,8 +10,6 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => CardProvider()),
-        ChangeNotifierProvider(create: (context) => CardProvider2()),
         ChangeNotifierProvider(create: (context) => BattleCardProvider()),
       ],
       child: MyApp(),

@@ -1,12 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
+enum CardStatus{ Win, Lose }
+
 class BattleCardProvider extends ChangeNotifier {
-  bool topSelected = false;
   bool _isDragging = false;
   String topCardResult = "";
   String bottomCardResult = "";
   bool _isTopCardDragging = false;
-  bool _isBottomCardDragging = false;
+
   Offset _topCardPosition = Offset.zero;
   double _topCardAngle = 0;
   Offset _bottomCardPosition = Offset.zero;
@@ -15,10 +18,8 @@ class BattleCardProvider extends ChangeNotifier {
   Size _screenSize = Size.zero;
 
   bool get isDragging => _isDragging;
-  bool get isTopCardDragging => _isTopCardDragging;
   Offset get getTopCardPosition => _topCardPosition;
   double get getTopCardAngle => _topCardAngle;
-  bool get isBottomCardDragging => _isBottomCardDragging;
   Offset get getBottomCardPosition => _bottomCardPosition;
   double get getBottomCardAngle => _bottomCardAngle;
   double get spacingHeight => _spacingHeight;
@@ -26,92 +27,79 @@ class BattleCardProvider extends ChangeNotifier {
   void setScreenSize(Size size) => _screenSize = size;
 
   void setDragging(bool isTopCardDragging){
-       _isTopCardDragging = isTopCardDragging;
-       if (_isTopCardDragging) {
-         _isBottomCardDragging = false;
-         _isTopCardDragging=true;
-         topSelected = true;
-       }else if(!_isTopCardDragging){
-        _isBottomCardDragging = true;
-        _isTopCardDragging=false;
-        topSelected = false;
-       }
+    _isTopCardDragging = isTopCardDragging;
   }
 
   void startPosition(DragStartDetails details){
     _isDragging =true;
-    if (topSelected) {
-      _isBottomCardDragging = false;
-      _isTopCardDragging = true;
-    }else if(!topSelected){
-      _isBottomCardDragging = true;
-      _isTopCardDragging = false;
-    }
     notifyListeners();
   }
   void updatePosition(DragUpdateDetails details){
     if (_isTopCardDragging) {
       _topCardPosition += Offset(details.delta.dx, 0);
       _bottomCardPosition += Offset(-details.delta.dx, 0);
-      print("top true");
-    }else if(!_isTopCardDragging){
+    }else {
       _topCardPosition += Offset(-details.delta.dx, 0);
       _bottomCardPosition += Offset(details.delta.dx, 0);
-      print("bot true");
-      print(_isTopCardDragging);
     }
 
-      final topCardX = _topCardPosition.dx;
-      _topCardAngle = 30 * topCardX / _screenSize.width;  
-      final BottomCardX = _bottomCardPosition.dx;
-      _bottomCardAngle = -30 * BottomCardX / _screenSize.width;
+    final topCardX = _topCardPosition.dx;
+    _topCardAngle = 30 * topCardX / _screenSize.width;  
+    final BottomCardX = _bottomCardPosition.dx;
+    _bottomCardAngle = -30 * BottomCardX / _screenSize.width;
     
     _spacingHeight=32;
     notifyListeners();
   }
   void endPosition(){
     _isDragging = false;
-    _isBottomCardDragging = false;
-    _isBottomCardDragging = false;
     notifyListeners();
 
-    cardStatus();
-    if (topCardResult == "Like") {
+    CardStatus? cardStatus = getTopCardStatus(force: true);
+    if (cardStatus == CardStatus.Win) {
       like();
       reset1Sec();
-    }else if(topCardResult == "No"){
+    }else if(cardStatus == CardStatus.Lose){
       no();
       reset1Sec();
     }else{
       reset();
     }
-    print(topCardResult);
 
 
   }
 
-  void cardStatus (){
+  CardStatus? getTopCardStatus ({bool force = false}){
     final topX = _topCardPosition.dx;
-    final botX = _bottomCardPosition.dx;
+    //final botX = _bottomCardPosition.dx;
 
-    final delta = 100;
-
-    if (topX >= delta) {
-      topCardResult ="No";
-    }else if(topX <= -delta){
-      topCardResult ="Like";
-    }else {
-      topCardResult ="";
-    }    
+    if (force) {
+      final delta = 100;
+      if (topX >= delta) {
+        return CardStatus.Win;
+      }else if(topX <= -delta){
+        return CardStatus.Lose;
+      }else {
+        return null;
+      }  
+    } else {
+      final delta = 60;
     
-    if (botX >= delta) {
-      bottomCardResult ="No";
-    }else if(botX <= -delta){
-      bottomCardResult ="Like";
-    }else {
-      bottomCardResult ="";
+      if (topX >= delta) {
+        return CardStatus.Win;
+      }else if(topX <= -delta){
+        return CardStatus.Lose;
+      }else {
+        return null;
+      }  
     }
+  }
 
+  double getOpacity(){
+    final delta = 120;
+    final pos = max(_topCardPosition.dx.abs(), _topCardPosition.dy.abs());
+    final opacity = pos / delta;
+    return min(opacity, 1);
   }
 
   void like(){
@@ -132,8 +120,6 @@ class BattleCardProvider extends ChangeNotifier {
   void reset() async {
     await Future.delayed(Duration(seconds: 0));
     _isDragging = false;
-        _isBottomCardDragging = false;
-    _isBottomCardDragging = false;
     _topCardPosition = Offset.zero;
     _bottomCardPosition = Offset.zero;
     _topCardAngle = 0;
@@ -145,8 +131,6 @@ class BattleCardProvider extends ChangeNotifier {
   void reset1Sec() async {
     await Future.delayed(Duration(seconds: 1));
     _isDragging = false;
-        _isBottomCardDragging = false;
-    _isBottomCardDragging = false;
     _topCardPosition = Offset.zero;
     _bottomCardPosition = Offset.zero;
     _topCardAngle = 0;

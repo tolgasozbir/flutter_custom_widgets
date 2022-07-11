@@ -22,15 +22,17 @@ class BattleCard extends StatefulWidget {
 
 class _BattleCardState extends State<BattleCard> {
 
+  TextStyle winLoseTextStyle = TextStyle(fontSize: 48,fontWeight: FontWeight.bold ,color: Colors.white);
+  double iconSize = 128;
+  Color iconColor = Colors.white;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final size = MediaQuery.of(context).size;
       final provider = Provider.of<BattleCardProvider>(context,listen: false);
-      bool a = widget.cardPosition == CardPosition.Top;
-      print("$a first set card == top" );
-      provider.setDragging(a);
+      provider.setDragging(widget.cardPosition == CardPosition.Top);
       provider.setScreenSize(size);
     });
   }
@@ -43,13 +45,10 @@ class _BattleCardState extends State<BattleCard> {
   Widget battleCard() {
     return GestureDetector(
       onPanDown: (details) {
-                if (widget.cardPosition == CardPosition.Top ) {
-          print("üst tıklandı");
+        if (widget.cardPosition == CardPosition.Top ) {
           context.read<BattleCardProvider>().setDragging(true);
         }else if(widget.cardPosition == CardPosition.Bottom ){
-          print("alt tıklandı");
           context.read<BattleCardProvider>().setDragging(false);
-
         }
       },
       onTap: (){
@@ -93,8 +92,74 @@ class _BattleCardState extends State<BattleCard> {
     return SizedBox(
       width: double.infinity,
       child: Card(
-        child: widget.child
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            widget.child,
+            cardStamps()
+          ],
+        )
       ),
     );
   }
+
+  Widget cardStamps(){
+    final status = context.watch<BattleCardProvider>().getTopCardStatus();
+    switch (status) {
+      case CardStatus.Win: return widget.cardPosition == CardPosition.Top ? win() : lose();
+      case CardStatus.Lose: return widget.cardPosition == CardPosition.Top ? lose() : win();
+      default: return SizedBox.shrink();
+    }
+  }
+
+  Widget win(){
+    final opacity = context.watch<BattleCardProvider>().getOpacity();
+    final status = context.watch<BattleCardProvider>().getTopCardStatus();
+
+    return Opacity(
+      opacity: opacity,
+      child: Container(
+        color: Colors.green.withOpacity(0.7),
+        child: status == CardStatus.Win
+          ? widget.cardPosition == CardPosition.Top ? winColumn() :loseColumn()
+          : widget.cardPosition == CardPosition.Top ? loseColumn() :winColumn()
+      ),
+    );
+  }
+
+  Widget lose(){
+    final opacity = context.watch<BattleCardProvider>().getOpacity();
+    final status = context.watch<BattleCardProvider>().getTopCardStatus();
+
+    return Opacity(
+      opacity: opacity,
+      child: Container(
+        color: Colors.red.withOpacity(0.7),
+        child: status == CardStatus.Win
+          ? widget.cardPosition == CardPosition.Top ? winColumn() :loseColumn()
+          : widget.cardPosition == CardPosition.Top ? loseColumn() :winColumn()
+      ),
+    );
+  }
+
+  Column winColumn() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.check_circle_outlined,size: iconSize,color: iconColor,),
+        Text("Win!",style: winLoseTextStyle)
+      ],
+    );
+  }    
+  
+  Column loseColumn() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.cancel_outlined,size: iconSize,color: iconColor,),
+        Text("Lose",style: winLoseTextStyle)
+      ],
+    );
+  }  
+
 }

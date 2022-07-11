@@ -1,7 +1,5 @@
 import 'package:custom_widgets/battle_card/battle_card.dart';
-import 'package:custom_widgets/battle_card/battle_card2.dart';
 import 'package:custom_widgets/battle_card/battle_cards_provider.dart';
-import 'package:custom_widgets/battle_card/cardprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,11 +23,17 @@ class _BattleScreenViewState extends State<BattleScreenView> {
     return Column(
       children: [   
         Expanded(
-          child: BattleCard(child: Container(color: Colors.blue,child: Text("aaa")),cardPosition: CardPosition.Top),
+          child: BattleCard(
+            cardPosition: CardPosition.Top,
+            child: Image.network("https://picsum.photos/400/400?random=1",fit: BoxFit.cover,),
+          ),
         ),
         spacerDivider(),
         Expanded(
-          child: BattleCard(child: Container(color: Colors.green,child: Text("aaa")),cardPosition: CardPosition.Bottom),
+          child: BattleCard(
+            cardPosition: CardPosition.Bottom,
+            child: Image.network("https://picsum.photos/400/400?random=2",fit: BoxFit.cover,),
+          ),
         ),
       ],
     );
