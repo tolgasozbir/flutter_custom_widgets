@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 enum CardStatus { Win , Lose }
 
 class BattleCardProvider extends ChangeNotifier {
+  bool? didBottomCardWin;
   CardStatus? cardStatus;
   bool topSelected = false;
   bool _isDragging = false;
@@ -50,22 +51,21 @@ class BattleCardProvider extends ChangeNotifier {
     CardStatus? bottomCardStatus = getBottomCardStatus(force: true);
     if (bottomCardStatus == CardStatus.Win) {
       WinPosition();
-      reset(milliseconds: 1000);
+      reset(milliseconds: 400);
     }else if(bottomCardStatus == CardStatus.Lose){
       losePosition();
-      reset(milliseconds: 1000);
+      reset(milliseconds: 400);
     }else{
       reset(milliseconds: 0);
     }
   }
 
-
   CardStatus? getBottomCardStatus({bool force=false}){
-
     final botX = _bottomCardPosition.dx;
 
     if (force) {
       final delta = 100;
+
       if (botX >= delta) {
         return CardStatus.Win;
       }else if(botX <= -delta){
@@ -75,6 +75,7 @@ class BattleCardProvider extends ChangeNotifier {
       }
     } else {
       final delta = 60;
+
       if (botX >= delta) {
         return CardStatus.Win;
       }else if(botX <= -delta){
@@ -98,6 +99,8 @@ class BattleCardProvider extends ChangeNotifier {
 
     _bottomCardAngle = 270;
     _bottomCardPosition += Offset((-.2 * _screenSize.width), (0.7 * _screenSize.height));
+
+    didBottomCardWin=true;
     notifyListeners();
   }  
   void losePosition(){
@@ -106,10 +109,12 @@ class BattleCardProvider extends ChangeNotifier {
 
     _bottomCardAngle = 90;
     _bottomCardPosition += Offset((-.2 * _screenSize.width), (0.7 * _screenSize.height));
+
+    didBottomCardWin=false;
     notifyListeners();
   }
 
-  void reset({int milliseconds=1000}) async {
+  void reset({int milliseconds=400}) async {
     await Future.delayed(Duration(milliseconds: milliseconds));
     _isDragging = false;
     _topCardPosition = Offset.zero;
@@ -117,8 +122,8 @@ class BattleCardProvider extends ChangeNotifier {
     _topCardAngle = 0;
     _bottomCardAngle = 0;
     _spacingHeight=0;
+    didBottomCardWin=null;
     notifyListeners();
-
   }  
 
 }

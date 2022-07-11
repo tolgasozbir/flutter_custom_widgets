@@ -8,27 +8,35 @@ enum CardPosition{ Top, Bottom }
 class BattleCard extends StatefulWidget {
   const BattleCard({
     Key? key, 
+    required this.cardPosition, 
     this.milliseconds = 400, 
-    required this.child, required this.cardPosition,
+    this.onTap,
+    required this.child, 
+    this.cardWinStamp, 
+    this.cardLoseStamp, 
+    this.cardResults,
   }) : super(key: key);
 
   final CardPosition cardPosition;
   final int milliseconds;
+  final VoidCallback? onTap;
   final Widget child;
+  final Widget? cardWinStamp;
+  final Widget? cardLoseStamp;
+  final void Function(bool? didBottomCardWin)? cardResults;
 
   @override
   State<BattleCard> createState() => _BattleCardState();
 }
 
 class _BattleCardState extends State<BattleCard> {
-
-  TextStyle winLoseTextStyle = TextStyle(fontSize: 48,fontWeight: FontWeight.bold ,color: Colors.white);
-  double iconSize = 128;
-  Color iconColor = Colors.white;
-
+  
+  late final CardPosition cardPosition;
+  
   @override
   void initState() {
     super.initState();
+    cardPosition = widget.cardPosition;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final size = MediaQuery.of(context).size;
       final provider = Provider.of<BattleCardProvider>(context,listen: false);
@@ -43,9 +51,7 @@ class _BattleCardState extends State<BattleCard> {
 
   Widget battleCard() {
     return GestureDetector(
-      onTap: (){
-        
-      },
+      onTap: widget.onTap,
       onPanStart: (details) {
         context.read<BattleCardProvider>().startPosition(details);
       },
@@ -54,14 +60,15 @@ class _BattleCardState extends State<BattleCard> {
       },      
       onPanEnd: (details){
         context.read<BattleCardProvider>().endPosition();
+        bool? result = context.read<BattleCardProvider>().didBottomCardWin;;
+        widget.cardResults?.call(result);
       },      
       child: LayoutBuilder(
         builder: (context,constraints) {
-          var cardPost = widget.cardPosition;
           final provider = Provider.of<BattleCardProvider>(context);
-          final position = cardPost == CardPosition.Top ? provider.getTopCardPosition : provider.getBottomCardPosition;
+          final position = cardPosition == CardPosition.Top ? provider.getTopCardPosition : provider.getBottomCardPosition;
           final duration = provider.isDragging ? 0 : widget.milliseconds;
-          final angle = cardPost == CardPosition.Top ? provider.getTopCardAngle * pi / 180 : provider.getBottomCardAngle * pi / 180;
+          final angle = cardPosition == CardPosition.Top ? provider.getTopCardAngle * pi / 180 : provider.getBottomCardAngle * pi / 180;
           final center = constraints.biggest.center(Offset.zero);
           final rotatedMatrix = Matrix4.identity()
           ..translate(center.dx, center.dy)
@@ -93,57 +100,54 @@ class _BattleCardState extends State<BattleCard> {
     );
   }
 
-    Widget cardStamps(){
+  Widget cardStamps(){
     final status = context.watch<BattleCardProvider>().getBottomCardStatus();
-    var cardPos = widget.cardPosition;
+
+    Widget winStamp =  widget.cardWinStamp != null 
+      ? widget.cardWinStamp! 
+      : stamp(
+        color: Colors.green.withOpacity(0.7), 
+        text: "Win!", 
+        icon: Icons.check_circle_outlined
+      );
+
+    Widget loseStamp = widget.cardLoseStamp != null 
+      ? widget.cardLoseStamp! 
+      : stamp(
+        color: Colors.red.withOpacity(0.7), 
+        text: "Lose", 
+        icon: Icons.cancel_outlined
+      );
+
     switch (status) {
-      case CardStatus.Win: return cardPos == CardPosition.Bottom ? win() : lose();
-      case CardStatus.Lose: return cardPos == CardPosition.Bottom ? lose() : win();
-      case null: return SizedBox.shrink();
+      case CardStatus.Win: return cardPosition == CardPosition.Bottom ? winStamp : loseStamp;
+      case CardStatus.Lose: return cardPosition == CardPosition.Bottom ? loseStamp : winStamp;
       default: return SizedBox.shrink();
     }
   }
 
-  Widget win(){
+  Widget stamp({
+    required Color color, 
+    required String text, 
+    required IconData icon, 
+    double? iconSize = 128, 
+    Color? iconColor=Colors.white,
+    TextStyle textStyle= const TextStyle(fontSize: 48,fontWeight: FontWeight.bold ,color: Colors.white)
+  }) {
     final opacity = context.watch<BattleCardProvider>().getOpacity();
     return Opacity(
       opacity: opacity,
       child: Container(
-        color: Colors.green.withOpacity(0.7),
-        child: winColumn(),
+        color: color,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon,size: iconSize,color: iconColor,),
+            Text("$text",style: textStyle)
+          ],
+        ),
       ),
-    );
-  }  
-  
-  Widget lose(){
-    final opacity = context.watch<BattleCardProvider>().getOpacity();
-    return Opacity(
-      opacity: opacity,
-      child: Container(
-        color: Colors.red.withOpacity(0.7),
-        child: loseColumn(),
-      ),
-    );
+    ); 
   }
 
-
-  Column winColumn() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.check_circle_outlined,size: iconSize,color: iconColor,),
-        Text("Win!",style: winLoseTextStyle)
-      ],
-    );
-  }    
-  
-  Column loseColumn() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.cancel_outlined,size: iconSize,color: iconColor,),
-        Text("Lose",style: winLoseTextStyle)
-      ],
-    );
-  }  
 }

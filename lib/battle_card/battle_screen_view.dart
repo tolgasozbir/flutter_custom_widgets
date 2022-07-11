@@ -33,6 +33,9 @@ class _BattleScreenViewState extends State<BattleScreenView> {
           child: BattleCard(
           cardPosition: CardPosition.Bottom,
             child: Image.network("https://picsum.photos/400/400?random=2",fit: BoxFit.cover,),
+            cardResults: (bool? didBottomCardWin){
+              print("didBottomCardWin $didBottomCardWin");
+            },
           ),
         ),
       ],
