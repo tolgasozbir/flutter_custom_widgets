@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:custom_widgets/test/cardprovider.dart';
+import 'package:custom_widgets/battle_card/cardprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

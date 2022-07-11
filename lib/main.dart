@@ -1,6 +1,8 @@
+import 'package:custom_widgets/battle_card/battle_cards_provider.dart';
+import 'package:custom_widgets/battle_card/battle_screen_view.dart';
+import 'package:custom_widgets/battle_card/cardprovider.dart';
+import 'package:custom_widgets/battle_card/provider2.dart';
 import 'package:custom_widgets/page_wave_transition/first_page_view.dart';
-import 'package:custom_widgets/test/card.dart';
-import 'package:custom_widgets/test/cardprovider.dart';
 import 'package:provider/provider.dart';
 import 'alphabetic_list_page_view/alphabetic_list_view.dart';
 import 'progress_button/progress_button_view.dart';
@@ -11,6 +13,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => CardProvider()),
+        ChangeNotifierProvider(create: (context) => CardProvider2()),
+        ChangeNotifierProvider(create: (context) => BattleCardProvider()),
       ],
       child: MyApp(),
     ),
@@ -30,7 +34,7 @@ class MyApp extends StatelessWidget {
         "/progress_button": (context) => ProgressButtonView(),
         "/alphabetic_list_view": (context) => AlphabeticListView(),
         "/page_wave_transition": (context) => FirstPageView(),
-        "/card": (context) => MyCArd(),
+        "/battle_card": (context) => BattleScreenView(),
       },
     );
   }
@@ -70,8 +74,8 @@ class _HomeState extends State<Home> {
             child: Text("Page Wave Transition")
           ),         
           ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/card"), 
-            child: Text("Page")
+            onPressed: () => Navigator.pushNamed(context, "/battle_card"), 
+            child: Text("Battle Cards")
           ),
         ],
       ),

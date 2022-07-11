@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CardProvider extends ChangeNotifier {
+class CardProvider2 extends ChangeNotifier {
   List<String> _urlImages = [
     "https://picsum.photos/400/400?random=1"
     "https://picsum.photos/400/400?random=2"
@@ -79,7 +79,7 @@ class CardProvider extends ChangeNotifier {
   }  
   void no(){
     _angle = 270;
-    _position += Offset((0.5 * _screenSize.width), (0.75 * _screenSize.height));
+    _position += Offset((0.5 * _screenSize.width), (1 * _screenSize.height));
     notifyListeners();
   }
 
