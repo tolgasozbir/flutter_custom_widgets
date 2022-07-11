@@ -1,3 +1,4 @@
+
 import 'dart:math';
 import 'package:custom_widgets/battle_card/battle_cards_provider.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ enum CardPosition{ Top, Bottom }
 class BattleCard extends StatefulWidget {
   const BattleCard({
     Key? key, 
-    this.milliseconds = 400, 
+    this.milliseconds = 3000, 
     required this.child, required this.cardPosition,
   }) : super(key: key);
 
@@ -72,7 +73,7 @@ class _BattleCardState extends State<BattleCard> {
           final position = cardPost == CardPosition.Top ? provider.getTopCardPosition : provider.getBottomCardPosition;
           final duration = provider.isDragging ? 0 : widget.milliseconds;
           final angle = cardPost == CardPosition.Top ? provider.getTopCardAngle * pi / 180 : provider.getBottomCardAngle * pi / 180;
-          final center = constraints.biggest.center(Offset.zero);
+          final center = cardPost == CardPosition.Top ? constraints.biggest.topCenter(Offset.zero) : constraints.biggest.bottomCenter(Offset.zero);;
           final rotatedMatrix = Matrix4.identity()
           ..translate(center.dx, center.dy)
           ..rotateZ(angle)
@@ -105,9 +106,11 @@ class _BattleCardState extends State<BattleCard> {
 
   Widget cardStamps(){
     final status = context.watch<BattleCardProvider>().getTopCardStatus();
+
     switch (status) {
       case CardStatus.Win: return widget.cardPosition == CardPosition.Top ? win() : lose();
       case CardStatus.Lose: return widget.cardPosition == CardPosition.Top ? lose() : win();
+      case null: return SizedBox.shrink();
       default: return SizedBox.shrink();
     }
   }
@@ -115,14 +118,19 @@ class _BattleCardState extends State<BattleCard> {
   Widget win(){
     final opacity = context.watch<BattleCardProvider>().getOpacity();
     final status = context.watch<BattleCardProvider>().getTopCardStatus();
-
+      bool isTopCard = widget.cardPosition == CardPosition.Top;
+      bool isWin = status == CardStatus.Win;
+      bool isLose = status == CardStatus.Lose;
+      bool isNull = status == null;
     return Opacity(
       opacity: opacity,
       child: Container(
         color: Colors.green.withOpacity(0.7),
-        child: status == CardStatus.Win
-          ? widget.cardPosition == CardPosition.Top ? winColumn() :loseColumn()
-          : widget.cardPosition == CardPosition.Top ? loseColumn() :winColumn()
+        child: isNull == true 
+        ? null
+        : isWin 
+          ? isTopCard ? winColumn() :loseColumn()
+          : isTopCard ? loseColumn() :winColumn()
       ),
     );
   }
@@ -131,13 +139,19 @@ class _BattleCardState extends State<BattleCard> {
     final opacity = context.watch<BattleCardProvider>().getOpacity();
     final status = context.watch<BattleCardProvider>().getTopCardStatus();
 
+      bool isTopCard = widget.cardPosition == CardPosition.Top;
+      bool isWin = status == CardStatus.Win;
+      bool isLose = status == CardStatus.Lose;
+      bool isNull = status == null;
     return Opacity(
       opacity: opacity,
       child: Container(
         color: Colors.red.withOpacity(0.7),
-        child: status == CardStatus.Win
-          ? widget.cardPosition == CardPosition.Top ? winColumn() :loseColumn()
-          : widget.cardPosition == CardPosition.Top ? loseColumn() :winColumn()
+        child: isNull == true 
+        ? null
+        : isWin 
+          ? isTopCard ? winColumn() :loseColumn()
+          : isTopCard ? loseColumn() :winColumn()
       ),
     );
   }

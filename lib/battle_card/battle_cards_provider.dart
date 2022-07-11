@@ -103,17 +103,17 @@ class BattleCardProvider extends ChangeNotifier {
   }
 
   void like(){
-    _topCardAngle = 90;
-    _bottomCardAngle = 90;
-    _topCardPosition += Offset((-0.5 * _screenSize.width), (1 * _screenSize.height));
-    _bottomCardPosition += Offset((0.5 * _screenSize.width), (1 * _screenSize.height));//Offset((-0.5 * _screenSize.width), (1 * _screenSize.height));
+    _topCardAngle = 270;
+    _bottomCardAngle = 270;
+    _topCardPosition += Offset((-1 * _screenSize.width), (0.5 * _screenSize.height));
+    _bottomCardPosition += Offset((1 * _screenSize.width), (-0.5 * _screenSize.height));
     notifyListeners();
   }  
   void no(){
-    _topCardAngle = 270;
-    _bottomCardAngle = 270;
-    _topCardPosition += Offset((0.5 * _screenSize.width), (1 * _screenSize.height));
-    _bottomCardPosition += Offset((0.5 * _screenSize.width), (1 * _screenSize.height));
+    _topCardAngle = 180;
+    _bottomCardAngle = 90;
+    _topCardPosition += Offset((2 * _screenSize.width), (0.5 * _screenSize.height));
+    _bottomCardPosition += Offset((-2 * _screenSize.width), (-0.5 * _screenSize.height));
     notifyListeners();
   }
 
@@ -129,7 +129,7 @@ class BattleCardProvider extends ChangeNotifier {
 
   }  
   void reset1Sec() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 3));
     _isDragging = false;
     _topCardPosition = Offset.zero;
     _bottomCardPosition = Offset.zero;
