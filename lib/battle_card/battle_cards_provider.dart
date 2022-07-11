@@ -2,13 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-enum CardStatus{ Win, Lose }
+enum CardStatus { Win , Lose }
 
 class BattleCardProvider extends ChangeNotifier {
+  CardStatus? cardStatus;
+  bool topSelected = false;
   bool _isDragging = false;
   String topCardResult = "";
   String bottomCardResult = "";
-  bool _isTopCardDragging = false;
 
   Offset _topCardPosition = Offset.zero;
   double _topCardAngle = 0;
@@ -26,28 +27,19 @@ class BattleCardProvider extends ChangeNotifier {
 
   void setScreenSize(Size size) => _screenSize = size;
 
-  void setDragging(bool isTopCardDragging){
-    _isTopCardDragging = isTopCardDragging;
-  }
-
   void startPosition(DragStartDetails details){
     _isDragging =true;
     notifyListeners();
   }
   void updatePosition(DragUpdateDetails details){
-    if (_isTopCardDragging) {
-      _topCardPosition += Offset(details.delta.dx, 0);
-      _bottomCardPosition += Offset(-details.delta.dx, 0);
-    }else {
-      _topCardPosition += Offset(-details.delta.dx, 0);
-      _bottomCardPosition += Offset(details.delta.dx, 0);
-    }
+    _topCardPosition += Offset(-details.delta.dx, 0);
+    _bottomCardPosition += Offset(details.delta.dx, 0);
 
     final topCardX = _topCardPosition.dx;
     _topCardAngle = 30 * topCardX / _screenSize.width;  
     final BottomCardX = _bottomCardPosition.dx;
     _bottomCardAngle = -30 * BottomCardX / _screenSize.width;
-    
+
     _spacingHeight=32;
     notifyListeners();
   }
@@ -55,70 +47,70 @@ class BattleCardProvider extends ChangeNotifier {
     _isDragging = false;
     notifyListeners();
 
-    CardStatus? cardStatus = getTopCardStatus(force: true);
-    if (cardStatus == CardStatus.Win) {
-      like();
-      reset1Sec();
-    }else if(cardStatus == CardStatus.Lose){
-      no();
-      reset1Sec();
+    CardStatus? bottomCardStatus = getBottomCardStatus(force: true);
+    if (bottomCardStatus == CardStatus.Win) {
+      WinPosition();
+      reset(milliseconds: 1000);
+    }else if(bottomCardStatus == CardStatus.Lose){
+      losePosition();
+      reset(milliseconds: 1000);
     }else{
-      reset();
+      reset(milliseconds: 0);
     }
-
-
   }
 
-  CardStatus? getTopCardStatus ({bool force = false}){
-    final topX = _topCardPosition.dx;
-    //final botX = _bottomCardPosition.dx;
+
+  CardStatus? getBottomCardStatus({bool force=false}){
+
+    final botX = _bottomCardPosition.dx;
 
     if (force) {
       final delta = 100;
-      if (topX >= delta) {
+      if (botX >= delta) {
         return CardStatus.Win;
-      }else if(topX <= -delta){
+      }else if(botX <= -delta){
         return CardStatus.Lose;
       }else {
         return null;
-      }  
+      }
     } else {
       final delta = 60;
-    
-      if (topX >= delta) {
+      if (botX >= delta) {
         return CardStatus.Win;
-      }else if(topX <= -delta){
+      }else if(botX <= -delta){
         return CardStatus.Lose;
       }else {
         return null;
-      }  
+      }
     }
   }
 
   double getOpacity(){
     final delta = 120;
-    final pos = max(_topCardPosition.dx.abs(), _topCardPosition.dy.abs());
+    final pos = max(_bottomCardPosition.dx.abs(), _bottomCardPosition.dy.abs());
     final opacity = pos / delta;
     return min(opacity, 1);
   }
 
-  void like(){
-    _topCardAngle = 270;
+  void WinPosition(){
+    _topCardAngle = 90;
+    _topCardPosition += Offset((-.2 * _screenSize.width), (0.7 * _screenSize.height));
+
     _bottomCardAngle = 270;
-    _topCardPosition += Offset((-1 * _screenSize.width), (0.5 * _screenSize.height));
-    _bottomCardPosition += Offset((1 * _screenSize.width), (-0.5 * _screenSize.height));
+    _bottomCardPosition += Offset((-.2 * _screenSize.width), (0.7 * _screenSize.height));
     notifyListeners();
   }  
-  void no(){
-    _topCardAngle = 180;
+  void losePosition(){
+    _topCardAngle = 270;
+    _topCardPosition += Offset((-.2 * _screenSize.width), (0.7 * _screenSize.height));
+
     _bottomCardAngle = 90;
-    _topCardPosition += Offset((2 * _screenSize.width), (0.5 * _screenSize.height));
-    _bottomCardPosition += Offset((-2 * _screenSize.width), (-0.5 * _screenSize.height));
+    _bottomCardPosition += Offset((-.2 * _screenSize.width), (0.7 * _screenSize.height));
     notifyListeners();
   }
 
-  void reset() async {
-    await Future.delayed(Duration(seconds: 0));
+  void reset({int milliseconds=1000}) async {
+    await Future.delayed(Duration(milliseconds: milliseconds));
     _isDragging = false;
     _topCardPosition = Offset.zero;
     _bottomCardPosition = Offset.zero;
@@ -128,16 +120,5 @@ class BattleCardProvider extends ChangeNotifier {
     notifyListeners();
 
   }  
-  void reset1Sec() async {
-    await Future.delayed(Duration(seconds: 3));
-    _isDragging = false;
-    _topCardPosition = Offset.zero;
-    _bottomCardPosition = Offset.zero;
-    _topCardAngle = 0;
-    _bottomCardAngle = 0;
-    _spacingHeight=0;
-    notifyListeners();
-
-  }
 
 }
