@@ -5,13 +5,9 @@ import 'package:flutter/material.dart';
 enum CardStatus { Win , Lose }
 
 class BattleCardProvider extends ChangeNotifier {
-  bool? didBottomCardWin;
-  CardStatus? cardStatus;
-  bool topSelected = false;
+  int _index = 0;
+  bool? _didBottomCardWin;
   bool _isDragging = false;
-  String topCardResult = "";
-  String bottomCardResult = "";
-
   Offset _topCardPosition = Offset.zero;
   double _topCardAngle = 0;
   Offset _bottomCardPosition = Offset.zero;
@@ -19,6 +15,8 @@ class BattleCardProvider extends ChangeNotifier {
   double _spacingHeight = 0;
   Size _screenSize = Size.zero;
 
+  int get getIndex => _index;
+  bool? get didBottomCardWin => _didBottomCardWin;
   bool get isDragging => _isDragging;
   Offset get getTopCardPosition => _topCardPosition;
   double get getTopCardAngle => _topCardAngle;
@@ -26,12 +24,18 @@ class BattleCardProvider extends ChangeNotifier {
   double get getBottomCardAngle => _bottomCardAngle;
   double get spacingHeight => _spacingHeight;
 
+  void incrementIndex(){
+    _index+=2;
+    notifyListeners();
+  }
+
   void setScreenSize(Size size) => _screenSize = size;
 
   void startPosition(DragStartDetails details){
     _isDragging =true;
     notifyListeners();
   }
+
   void updatePosition(DragUpdateDetails details){
     _topCardPosition += Offset(-details.delta.dx, 0);
     _bottomCardPosition += Offset(details.delta.dx, 0);
@@ -44,6 +48,7 @@ class BattleCardProvider extends ChangeNotifier {
     _spacingHeight=32;
     notifyListeners();
   }
+
   void endPosition(){
     _isDragging = false;
     notifyListeners();
@@ -51,10 +56,10 @@ class BattleCardProvider extends ChangeNotifier {
     CardStatus? bottomCardStatus = getBottomCardStatus(force: true);
     if (bottomCardStatus == CardStatus.Win) {
       WinPosition();
-      reset(milliseconds: 400);
+      reset(milliseconds: 1000);
     }else if(bottomCardStatus == CardStatus.Lose){
       losePosition();
-      reset(milliseconds: 400);
+      reset(milliseconds: 1000);
     }else{
       reset(milliseconds: 0);
     }
@@ -100,9 +105,10 @@ class BattleCardProvider extends ChangeNotifier {
     _bottomCardAngle = 270;
     _bottomCardPosition += Offset((-.2 * _screenSize.width), (0.7 * _screenSize.height));
 
-    didBottomCardWin=true;
+    _didBottomCardWin=true;
     notifyListeners();
   }  
+
   void losePosition(){
     _topCardAngle = 270;
     _topCardPosition += Offset((-.2 * _screenSize.width), (0.7 * _screenSize.height));
@@ -110,7 +116,7 @@ class BattleCardProvider extends ChangeNotifier {
     _bottomCardAngle = 90;
     _bottomCardPosition += Offset((-.2 * _screenSize.width), (0.7 * _screenSize.height));
 
-    didBottomCardWin=false;
+    _didBottomCardWin=false;
     notifyListeners();
   }
 
@@ -122,7 +128,7 @@ class BattleCardProvider extends ChangeNotifier {
     _topCardAngle = 0;
     _bottomCardAngle = 0;
     _spacingHeight=0;
-    didBottomCardWin=null;
+    _didBottomCardWin=null;
     notifyListeners();
   }  
 

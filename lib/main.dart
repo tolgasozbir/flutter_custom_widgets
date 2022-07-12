@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         "/progress_button": (context) => ProgressButtonView(),
         "/alphabetic_list_view": (context) => AlphabeticListView(),
         "/page_wave_transition": (context) => FirstPageView(),
-        "/battle_card": (context) => BattleScreenView(),
+        "/battle_cards": (context) => BattleScreenView(),
       },
     );
   }
@@ -64,13 +64,13 @@ class _HomeState extends State<Home> {
           ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, "/alphabetic_list_view"), 
             child: Text("Alphabetic List")
-          ),          
+          ),
           ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, "/page_wave_transition"), 
             child: Text("Page Wave Transition")
-          ),         
+          ),
           ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/battle_card"), 
+            onPressed: () => Navigator.pushNamed(context, "/battle_cards"), 
             child: Text("Battle Cards")
           ),
         ],

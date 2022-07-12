@@ -12,8 +12,6 @@ class BattleScreenView extends StatefulWidget {
 
 class _BattleScreenViewState extends State<BattleScreenView> {
 
-  int index = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,21 +29,19 @@ class _BattleScreenViewState extends State<BattleScreenView> {
           Expanded(
             child: BattleCard(
               cardPosition: CardPosition.Top,
-              child: Image.network("https://picsum.photos/400/400?random=${index % 2 == 0 ? index : index+2}",fit: BoxFit.cover,),
+              child: Image.network("https://picsum.photos/400/400?random=${context.read<BattleCardProvider>().getIndex}",fit: BoxFit.cover,),
             ),
           ),
           spacerDivider(),
           Expanded(
             child: BattleCard(
             cardPosition: CardPosition.Bottom,
-              child: Image.network("https://picsum.photos/400/400?random=${index % 2 == 1 ? index : index+2}",fit: BoxFit.cover,),
+              child: Image.network("https://picsum.photos/400/400?random=${context.read<BattleCardProvider>().getIndex+1}",fit: BoxFit.cover,),
               cardResults: (bool? didBottomCardWin) async {
                 print("didBottomCardWin $didBottomCardWin");
                 if (didBottomCardWin != null) {
                   await Future.delayed(Duration(milliseconds: 400));
-                  setState(() {
-                    index++;
-                  });
+                  context.read<BattleCardProvider>().incrementIndex();
                 }
               },
             ),

@@ -60,7 +60,7 @@ class _BattleCardState extends State<BattleCard> {
       },      
       onPanEnd: (details){
         context.read<BattleCardProvider>().endPosition();
-        bool? result = context.read<BattleCardProvider>().didBottomCardWin;;
+        bool? result = context.read<BattleCardProvider>().didBottomCardWin;
         widget.cardResults?.call(result);
       },      
       child: LayoutBuilder(
