@@ -1,5 +1,6 @@
 import 'package:custom_widgets/battle_card/battle_cards_provider.dart';
 import 'package:custom_widgets/battle_card/battle_screen_view.dart';
+import 'package:custom_widgets/custom_tabBar_view/custom_tabBar_view.dart';
 import 'package:custom_widgets/page_wave_transition/first_page_view.dart';
 import 'package:provider/provider.dart';
 import 'alphabetic_list_page_view/alphabetic_list_view.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         "/alphabetic_list_view": (context) => AlphabeticListView(),
         "/page_wave_transition": (context) => FirstPageView(),
         "/battle_cards": (context) => BattleScreenView(),
+        "/custom_tabBar": (context) => CustomTabBarView(),
       },
     );
   }
@@ -72,6 +74,10 @@ class _HomeState extends State<Home> {
           ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, "/battle_cards"), 
             child: Text("Battle Cards")
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, "/custom_tabBar"), 
+            child: Text("Custom TabBar View")
           ),
         ],
       ),
