@@ -9,17 +9,6 @@ class OtherPageView extends StatefulWidget {
 
 class _OtherPageViewState extends State<OtherPageView> with SingleTickerProviderStateMixin {
 
-  late final AnimationController _fadeAnimationController;
-  late final Animation<double> _fadeAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _fadeAnimationController = AnimationController(vsync: this,duration: Duration(seconds: 1));
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1).animate(_fadeAnimationController);
-    _fadeAnimationController.forward();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,13 +17,6 @@ class _OtherPageViewState extends State<OtherPageView> with SingleTickerProvider
   }
 
   Widget _bodyView() {
-    return FadeTransition(
-      opacity: _fadeAnimation,
-      child: dummyView(),
-    );
-  }
-
-    Widget dummyView(){
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -48,4 +30,5 @@ class _OtherPageViewState extends State<OtherPageView> with SingleTickerProvider
       },
     );
   }
+
 }

@@ -12,6 +12,7 @@ class RippleView extends StatefulWidget {
 class _RippleViewState extends State<RippleView> {
 
   late final AnimationController rippleController;
+  Duration animationDuration = Duration(seconds: 1);
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +38,34 @@ class _RippleViewState extends State<RippleView> {
       ),
       itemCount: 40,
       itemBuilder: (BuildContext context, int index) {
-        return InkWell(
-          onTap: () async {
-            rippleController.forward();
-            await Future.delayed(Duration(seconds: 1),() {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> OtherPageView()));
-            });
-            rippleController.reverse();
-          },
-          child: Card(
-            color: Colors.primaries[index%Colors.primaries.length].shade300,
-          ),
-        );
+        return gridItem(context, index);
       },
     );
   }
 
+  InkWell gridItem(BuildContext context, int index) {
+    return InkWell(
+      onTap: () async {
+        rippleController.forward();
+        await Future.delayed(animationDuration,() {
+          pushOtherPage();
+        });
+      },
+      child: Card(
+        color: Colors.primaries[index%Colors.primaries.length].shade300,
+      ),
+    );
+  }
+
+  void pushOtherPage(){
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => OtherPageView(),
+        transitionsBuilder: (_, anim, __, child) => FadeTransition(opacity: anim, child: child),
+        transitionDuration: animationDuration,
+      ),
+    );
+  }
   
 }
