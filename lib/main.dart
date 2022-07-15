@@ -2,6 +2,7 @@ import 'package:custom_widgets/battle_card/battle_cards_provider.dart';
 import 'package:custom_widgets/battle_card/battle_screen_view.dart';
 import 'package:custom_widgets/custom_clip_button/clipped_button_view.dart';
 import 'package:custom_widgets/custom_tabBar_view/custom_tabBar_view.dart';
+import 'package:custom_widgets/page_ripple_transition/ripple_view.dart.dart';
 import 'package:custom_widgets/page_wave_transition/first_page_view.dart';
 import 'package:provider/provider.dart';
 import 'alphabetic_list_page_view/alphabetic_list_view.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         "/battle_cards": (context) => BattleScreenView(),
         "/custom_tabBar": (context) => CustomTabBarView(),
         "/custom_clipped_button": (context) => ClippedButtonView(),
+        "/page_ripple_transition": (context) => RippleView(),
       },
     );
   }
@@ -71,7 +73,7 @@ class _HomeState extends State<Home> {
           ),
           ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, "/page_wave_transition"), 
-            child: Text("Page Wave Transition")
+            child: Text("Wave Transition")
           ),
           ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, "/battle_cards"), 
@@ -84,6 +86,10 @@ class _HomeState extends State<Home> {
           ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, "/custom_clipped_button"), 
             child: Text("Custom Button Clip")
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, "/page_ripple_transition"), 
+            child: Text("Ripple Transition")
           ),
         ],
       ),
