@@ -4,6 +4,7 @@ import 'package:custom_widgets/custom_clip_button/clipped_button_view.dart';
 import 'package:custom_widgets/custom_tabBar_view/custom_tabBar_view.dart';
 import 'package:custom_widgets/page_ripple_transition/ripple_view.dart.dart';
 import 'package:custom_widgets/page_wave_transition/first_page_view.dart';
+import 'package:custom_widgets/parallax_effect/parallax_view.dart';
 import 'package:provider/provider.dart';
 import 'alphabetic_list_page_view/alphabetic_list_view.dart';
 import 'progress_button/progress_button_view.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         "/custom_tabBar": (context) => CustomTabBarView(),
         "/custom_clipped_button": (context) => ClippedButtonView(),
         "/page_ripple_transition": (context) => RippleView(),
+        "/parallax": (context) => ParallaxView(),
       },
     );
   }
@@ -90,6 +92,10 @@ class _HomeState extends State<Home> {
           ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, "/page_ripple_transition"), 
             child: Text("Ripple Transition")
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, "/parallax"), 
+            child: Text("Parallax Effect")
           ),
         ],
       ),
