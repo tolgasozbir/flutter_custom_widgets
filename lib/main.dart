@@ -1,3 +1,4 @@
+import 'package:custom_widgets/animated_dialogs/dialogs.view.dart';
 import 'package:custom_widgets/battle_card/battle_cards_provider.dart';
 import 'package:custom_widgets/battle_card/battle_screen_view.dart';
 import 'package:custom_widgets/custom_clip_button/clipped_button_view.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         "/custom_clipped_button": (context) => ClippedButtonView(),
         "/page_ripple_transition": (context) => RippleView(),
         "/parallax": (context) => ParallaxView(),
+        "/animated_dialogs": (context) => DialogsView(),
       },
     );
   }
@@ -97,8 +99,13 @@ class _HomeState extends State<Home> {
             onPressed: () => Navigator.pushNamed(context, "/parallax"), 
             child: Text("Parallax Effect")
           ),
+          ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, "/animated_dialogs"), 
+            child: Text("Animated Dialogs")
+          ),
         ],
       ),
     );
   }
+
 }
