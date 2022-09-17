@@ -10,7 +10,7 @@ class DialogsView extends StatelessWidget {
       body: _bodyView(context),
     );
   }
-  //TODO: Tüm kombinasyonlar gösterilcek
+  
   SizedBox _bodyView(BuildContext context) {
     return SizedBox.expand(
       child: Column(
@@ -22,7 +22,7 @@ class DialogsView extends StatelessWidget {
               showAnimatedDialog(
                 context: context, 
                 duration: Duration(milliseconds: 600),
-                slidePosition: SlidePosition.center, 
+                slidePosition: SlidePosition.center,
                 fading: true,
                 scaleY: true,
                 scaleX: false,

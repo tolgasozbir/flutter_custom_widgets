@@ -18,18 +18,18 @@ abstract class AlphabeticListViewModel extends State<AlphabeticListView> {
     init();
   }
 
-  void changeLoading(){
-    setState(() {   
-      isLoading = !isLoading;
-    });
-  }
-
   Future<void> init() async {
     changeLoading();
     await getUsers();
     await getFirstLetters();
     await Future.delayed(Duration(seconds: 1));
     changeLoading();
+  }
+
+  void changeLoading(){
+    setState(() {   
+      isLoading = !isLoading;
+    });
   }
 
   Future<void> getUsers() async {

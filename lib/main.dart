@@ -67,44 +67,24 @@ class _HomeState extends State<Home> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/progress_button"), 
-            child: Text("Progress Button")
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/alphabetic_list_view"), 
-            child: Text("Alphabetic List")
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/page_wave_transition"), 
-            child: Text("Wave Transition")
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/battle_cards"), 
-            child: Text("Battle Cards")
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/custom_tabBar"), 
-            child: Text("Custom TabBar View")
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/custom_clipped_button"), 
-            child: Text("Custom Button Clip")
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/page_ripple_transition"), 
-            child: Text("Ripple Transition")
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/parallax"), 
-            child: Text("Parallax Effect")
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, "/animated_dialogs"), 
-            child: Text("Animated Dialogs")
-          ),
+          routeBtn(routeName: '/progress_button', title: 'Progress Button'),
+          routeBtn(routeName: '/alphabetic_list_view', title: 'Alphabetic List'),
+          routeBtn(routeName: '/page_wave_transition', title: 'Wave Transition'),
+          routeBtn(routeName: '/battle_cards', title: 'Battle Cards'),
+          routeBtn(routeName: '/custom_tabBar', title: 'Custom TabBar View'),
+          routeBtn(routeName: '/custom_clipped_button', title: 'Custom Button Clip'),
+          routeBtn(routeName: '/page_ripple_transition', title: 'Ripple Transition'),
+          routeBtn(routeName: '/parallax', title: 'Parallax Effect'),
+          routeBtn(routeName: '/animated_dialogs', title: 'Animated Dialogs'),
         ],
       ),
+    );
+  }
+
+  ElevatedButton routeBtn({required String routeName, required String title, Object? arguments,}){
+    return ElevatedButton(
+      onPressed: () => Navigator.pushNamed(context, routeName), 
+      child: Text(title)
     );
   }
 

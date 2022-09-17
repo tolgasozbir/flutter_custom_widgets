@@ -4,7 +4,6 @@ enum SlidePosition {
   left,right,top,bot,center
 }
 
-
 Future<T?> showAnimatedDialog<T extends Object?>({
   required BuildContext context,
   required Widget dialogPageContent,
@@ -64,22 +63,3 @@ Future<T?> showAnimatedDialog<T extends Object?>({
     },
   );
 }
-
-      // case SlidePosition.left: return Tween(begin: Offset(-1,0),end: Offset(0,0));
-      // case SlidePosition.right: return Tween(begin: Offset(1,0),end: Offset(0,0));
-      // case SlidePosition.top: return Tween(begin: Offset(0,-1),end: Offset(0,0));
-      // case SlidePosition.bot: return Tween(begin: Offset(0,1),end: Offset(0,0));
-      // case SlidePosition.center: return Tween(begin: Offset(0,0),end: Offset(0,0));
-
-      /*
-        return SlideTransition(
-          position: Tween(begin: Offset(0,1),end: Offset(0,0)).animate(animation),
-          child: Transform.scale(
-            scale: animation.value,
-            child: Opacity(
-              opacity: animation.value,
-              child: child
-            ),
-          ),
-        );
-      */
